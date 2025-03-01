@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/changeset/V001_create_table_priority_data.sql
+  - include:
+      file: db/changelog/changeset/V002_create_table_category_data.sql
+  - include:
+      file: db/changelog/changeset/V003_create_table_task_data.sql
+  - include:
+      file: db/changelog/changeset/V004_create_table_stat_data.sql
+  - include:
+      file: db/changelog/changeset/V005_create_table_activity.sql
+  - include:
+      file: db/changelog/changeset/V006_create_add_task_trigger.sql
+  - include:
+      file: db/changelog/changeset/V007_create_update_task_trigger.sql
+  - include:
+      file: db/changelog/changeset/V008_create_delete_task_trigger.sql

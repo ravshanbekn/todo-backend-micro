@@ -1,0 +1,6 @@
+rootProject.name = 'todo-backend-micro'
+
+includeBuild 'todo-config-server'
+includeBuild 'todo-eureka-server'
+includeBuild 'user-service'
+includeBuild 'task-service'

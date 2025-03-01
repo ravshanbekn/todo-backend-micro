@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: task-service
+
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-master.yml
+
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/todo_task_db
+    username: postgres
+    password: postgres
+
+  # for reading configurations
+  config:
+    import: configserver:http://localhost:8888
+
+  # for mutual parent files: "application-micro"
+  profiles:
+    active: micro

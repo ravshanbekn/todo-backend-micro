@@ -1,0 +1,17 @@
+spring:
+  application:
+    name:
+      todo-eureka-server
+
+  config:
+    import: configserver:http://localhost:8888
+
+# for disabling registration of microservices to registry
+eureka:
+  client:
+    # no need to register microservices from this module
+    register-with-eureka: false
+    fetch-registry: false
+
+server:
+  port: 8761
