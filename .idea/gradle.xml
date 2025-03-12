@@ -7,14 +7,14 @@
         <compositeConfiguration>
           <compositeBuild compositeDefinitionSource="SCRIPT">
             <builds>
+              <build path="$PROJECT_DIR$/api-gateway" name="api-gateway">
+                <projects>
+                  <project path="$PROJECT_DIR$/api-gateway" />
+                </projects>
+              </build>
               <build path="$PROJECT_DIR$/task-service" name="task-service">
                 <projects>
                   <project path="$PROJECT_DIR$/task-service" />
-                </projects>
-              </build>
-              <build path="$PROJECT_DIR$/todo-config-server" name="todo-config-server">
-                <projects>
-                  <project path="$PROJECT_DIR$/todo-config-server" />
                 </projects>
               </build>
               <build path="$PROJECT_DIR$/todo-eureka-server" name="todo-eureka-server">
@@ -37,8 +37,8 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/api-gateway" />
             <option value="$PROJECT_DIR$/task-service" />
-            <option value="$PROJECT_DIR$/todo-config-server" />
             <option value="$PROJECT_DIR$/todo-eureka-server" />
             <option value="$PROJECT_DIR$/user-service" />
           </set>

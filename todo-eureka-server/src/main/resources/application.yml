@@ -3,15 +3,27 @@ spring:
     name:
       todo-eureka-server
 
-  config:
-    import: configserver:http://localhost:8888
-
 # for disabling registration of microservices to registry
 eureka:
   client:
     # no need to register microservices from this module
     register-with-eureka: false
     fetch-registry: false
+
+    # where we are going to register application
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+    # every instance should have unique id
+    instance:
+      instance-id: ${spring.application.name}:${server.port}
+
+logging:
+  level:
+    com:
+      netflix:
+        eureka: OFF
+        discovery: OFF
 
 server:
   port: 8761

@@ -13,14 +13,19 @@ spring:
 
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/todo_task_db
+    url: jdbc:postgresql://localhost:5433/todo_task_db
     username: postgres
     password: postgres
 
-  # for reading configurations
-  config:
-    import: configserver:http://localhost:8888
+eureka:
+  client:
+    # where we need to register microservices
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
 
-  # for mutual parent files: "application-micro"
-  profiles:
-    active: micro
+  # every instance should have unique id
+  instance:
+    instance-id: ${spring.application.name}:${server.port}
+
+server:
+  port: 8090

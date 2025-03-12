@@ -2,14 +2,6 @@ spring:
   application:
     name: user-service
 
-  # for reading configurations
-  config:
-    import: configserver:http://localhost:8888
-
-  # for mutual parent files: "application-micro"
-  profiles:
-    active: micro
-
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yml
 
@@ -21,6 +13,19 @@ spring:
 
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5433/todo_user_db
+    url: jdbc:postgresql://localhost:5432/todo_user_db
     username: postgres
     password: postgres
+
+eureka:
+  client:
+    # where we need to register microservices
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+  # every instance should have unique id
+  instance:
+    instance-id: ${spring.application.name}:${server.port}
+
+server:
+  port: 8080
