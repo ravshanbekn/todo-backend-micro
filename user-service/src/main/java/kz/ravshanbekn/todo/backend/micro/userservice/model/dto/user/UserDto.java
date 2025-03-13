@@ -1,12 +1,10 @@
-package kz.ravshanbekn.todo.backend.micro.userservice.model.dto;
+package kz.ravshanbekn.todo.backend.micro.userservice.model.dto.user;
 
 import kz.ravshanbekn.todo.backend.micro.userservice.model.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
 
 @Getter
 @Setter
@@ -17,5 +15,5 @@ public class UserDto {
     private Long id;
     private String email;
     private String name;
-    private List<Role> roles;
+    private Role roles;
 }

@@ -1,8 +1,15 @@
 spring:
   application:
     name: api-gateway
-  config:
-    import: configserver:http://localhost:8888
+
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          # for correct api gateway work
+          enabled: true
+          # ignores letters case
+          lower-case-service-id: true
 
 server:
   port: 8765

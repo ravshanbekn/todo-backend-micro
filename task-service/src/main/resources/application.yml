@@ -27,5 +27,19 @@ eureka:
   instance:
     instance-id: ${spring.application.name}:${server.port}
 
+management:
+  endpoint:
+    gateway:
+      access: unrestricted
+
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+logging:
+  pattern:
+    console: "%C{1.} [%-5level] %d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+
 server:
   port: 8090
