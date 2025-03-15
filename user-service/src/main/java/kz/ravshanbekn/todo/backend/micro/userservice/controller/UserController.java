@@ -52,6 +52,9 @@ public class UserController {
     @Operation(
             summary = "Get user by id",
             description = "Returns user by provided id",
+            parameters = {
+                    @Parameter(name = "userId", description = "User ID", required = true, example = "1")
+            },
             responses = {
                     @ApiResponse(responseCode = "200", description = "User is found",
                             content = @Content(
@@ -70,6 +73,9 @@ public class UserController {
     @Operation(
             summary = "Update user by id",
             description = "Updates user by provided ID and data",
+            parameters = {
+                    @Parameter(name = "userId", description = "User ID", required = true, example = "1")
+            },
             responses = {
                     @ApiResponse(responseCode = "200", description = "User is updated",
                             content = @Content(

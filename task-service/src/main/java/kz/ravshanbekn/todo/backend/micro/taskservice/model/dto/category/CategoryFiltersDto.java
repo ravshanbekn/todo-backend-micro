@@ -8,5 +8,4 @@ import lombok.Setter;
 public class CategoryFiltersDto {
 
     private String title;
-    private Long userId;
 }

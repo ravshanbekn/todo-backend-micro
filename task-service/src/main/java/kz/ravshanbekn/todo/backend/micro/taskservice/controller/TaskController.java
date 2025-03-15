@@ -1,7 +1,9 @@
 package kz.ravshanbekn.todo.backend.micro.taskservice.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import kz.ravshanbekn.todo.backend.micro.taskservice.model.dto.task.TaskCreateRequestDto;
 import kz.ravshanbekn.todo.backend.micro.taskservice.model.dto.task.TaskDto;
 import kz.ravshanbekn.todo.backend.micro.taskservice.model.dto.task.TaskFiltersDto;
@@ -31,39 +33,111 @@ public class TaskController {
 
     private final TaskService taskService;
 
+    @Operation(
+            summary = "Retrieve all tasks for a user",
+            description = "Returns a list of all tasks associated with the given user ID.",
+            parameters = {
+                    @Parameter(name = "userId", description = "User ID", required = true, example = "1")
+            },
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Tasks successfully retrieved"),
+                    @ApiResponse(responseCode = "400", description = "Invalid user ID")
+            }
+    )
     @PostMapping("/all")
     @ResponseStatus(HttpStatus.OK)
     public List<TaskDto> findAll(@RequestParam Long userId) {
         return taskService.findAllByUserId(userId);
     }
 
+    @Operation(
+            summary = "Create a new task",
+            description = "Creates a new task for the specified user ID.",
+            parameters = {
+                    @Parameter(name = "userId", description = "User ID", required = true, example = "1")
+            },
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Task creation request",
+                    required = true
+            ),
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Task successfully created"),
+                    @ApiResponse(responseCode = "400", description = "Invalid input data")
+            }
+    )
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public TaskDto create(@RequestBody @Valid TaskCreateRequestDto taskCreateRequestDto) {
-        return taskService.create(taskCreateRequestDto);
+    public TaskDto create(@RequestParam Long userId,
+                          @RequestBody @Valid TaskCreateRequestDto taskCreateRequestDto) {
+        return taskService.create(userId, taskCreateRequestDto);
     }
 
+    @Operation(
+            summary = "Update an existing task",
+            description = "Updates an existing task with new details.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Task successfully updated"),
+                    @ApiResponse(responseCode = "400", description = "Invalid input data"),
+                    @ApiResponse(responseCode = "404", description = "Task not found")
+            }
+    )
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     public TaskDto update(@RequestBody @Valid TaskUpdateRequestDto taskUpdateRequestDto) {
         return taskService.update(taskUpdateRequestDto);
     }
 
+    @Operation(
+            summary = "Delete a task by ID",
+            description = "Deletes a task based on the provided task ID.",
+            parameters = {
+                    @Parameter(name = "taskId", description = "ID of the task to be deleted", required = true, example = "10")
+            },
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Task successfully deleted"),
+                    @ApiResponse(responseCode = "400", description = "Invalid task ID"),
+                    @ApiResponse(responseCode = "404", description = "Task not found")
+            }
+    )
     @DeleteMapping("/{taskId}")
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable("taskId") Long taskId) {
         taskService.delete(taskId);
     }
 
+    @Operation(
+            summary = "Get task by ID",
+            description = "Retrieves a task based on the provided task ID.",
+            parameters = {
+                    @Parameter(name = "taskId", description = "ID of the task to retrieve", required = true, example = "10")
+            },
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Task successfully retrieved"),
+                    @ApiResponse(responseCode = "400", description = "Invalid task ID"),
+                    @ApiResponse(responseCode = "404", description = "Task not found")
+            }
+    )
     @GetMapping("/{taskId}")
     @ResponseStatus(HttpStatus.OK)
     public TaskDto findById(@PathVariable("taskId") Long taskId) {
         return taskService.findById(taskId);
     }
 
+    @Operation(
+            summary = "Search tasks with filters",
+            description = "Searches for tasks based on the provided filter criteria for a specific user.",
+            parameters = {
+                    @Parameter(name = "userId", description = "User ID", required = true, example = "1")
+            },
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Tasks successfully retrieved"),
+                    @ApiResponse(responseCode = "400", description = "Invalid input data")
+            }
+    )
     @PostMapping("/search")
     @ResponseStatus(HttpStatus.OK)
-    public Page<TaskDto> search(@RequestBody @Valid TaskFiltersDto taskFiltersDto) {
-        return taskService.findTasksByFilters(taskFiltersDto);
+    public Page<TaskDto> search(@RequestParam Long userId,
+                                @RequestBody @Valid TaskFiltersDto taskFiltersDto) {
+        return taskService.findTasksByFilters(userId, taskFiltersDto);
     }
 }

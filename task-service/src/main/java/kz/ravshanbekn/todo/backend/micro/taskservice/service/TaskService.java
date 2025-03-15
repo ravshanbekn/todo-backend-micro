@@ -38,8 +38,9 @@ public class TaskService {
     }
 
     @Transactional
-    public TaskDto create(TaskCreateRequestDto taskCreateRequestDto) {
+    public TaskDto create(Long userId, TaskCreateRequestDto taskCreateRequestDto) {
         Task task = taskConverter.toEntity(taskCreateRequestDto);
+        task.setUserId(userId); // todo: verify if the user exits
         task.setCategory(Objects.nonNull(taskCreateRequestDto.getCategoryId()) ?
                 categoryService.getCategoryById(taskCreateRequestDto.getCategoryId()) : null);
         task.setPriority(Objects.nonNull(taskCreateRequestDto.getPriorityId()) ?
@@ -68,12 +69,15 @@ public class TaskService {
 
     @Transactional(readOnly = true)
     public TaskDto findById(Long taskId) {
+        // todo: check if the user is owner of this task
         Task task = getTaskById(taskId);
         return taskConverter.toDto(task);
     }
 
     @Transactional(readOnly = true)
-    public Page<TaskDto> findTasksByFilters(TaskFiltersDto taskFiltersDto) {
+    public Page<TaskDto> findTasksByFilters(Long userId, TaskFiltersDto taskFiltersDto) {
+        // todo: check if the user exists
+
         Date dateFrom = null;
         Date dateTo = null;
         if (Objects.nonNull(taskFiltersDto.getDateFrom())) {
@@ -89,7 +93,7 @@ public class TaskService {
         PageRequest pageRequest = PageRequest.of(taskFiltersDto.getPageNumber(), taskFiltersDto.getPageSize(), sort);
 
         Page<Task> result = taskRepository.findByParams(taskFiltersDto.getTitle(), taskFiltersDto.getCompleted(),
-                taskFiltersDto.getPriorityId(), taskFiltersDto.getCategoryId(), taskFiltersDto.getUserId(), dateFrom, dateTo, pageRequest);
+                taskFiltersDto.getPriorityId(), taskFiltersDto.getCategoryId(), userId, dateFrom, dateTo, pageRequest);
         return result.map(taskConverter::toDto);
     }
 

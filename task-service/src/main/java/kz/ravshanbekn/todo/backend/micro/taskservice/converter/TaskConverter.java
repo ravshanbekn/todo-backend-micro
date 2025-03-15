@@ -21,7 +21,6 @@ public class TaskConverter {
         task.setTitle(taskCreateRequestDto.getTitle());
         task.setCompleted(taskCreateRequestDto.isCompleted());
         task.setDate(taskCreateRequestDto.getDate());
-        task.setUserId(taskCreateRequestDto.getUserId());
         return task;
     }
 

@@ -28,6 +28,4 @@ public class TaskFiltersDto {
 
     private Date dateFrom;
     private Date dateTo;
-
-    private Long userId;
 }

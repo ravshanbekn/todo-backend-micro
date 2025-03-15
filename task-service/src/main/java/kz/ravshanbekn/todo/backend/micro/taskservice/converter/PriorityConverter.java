@@ -13,7 +13,6 @@ public class PriorityConverter {
         Priority priority = new Priority();
         priority.setTitle(priorityCreateRequestDto.getTitle());
         priority.setColor(priorityCreateRequestDto.getColor());
-        priority.setUserId(priorityCreateRequestDto.getUserId());
         return priority;
     }
 

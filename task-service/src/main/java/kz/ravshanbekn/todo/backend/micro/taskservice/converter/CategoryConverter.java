@@ -14,7 +14,6 @@ public class CategoryConverter {
         category.setTitle(categoryCreateRequestDto.getTitle());
         category.setCompletedCount(0L);
         category.setUncompletedCount(0L);
-        category.setUserId(categoryCreateRequestDto.getUserId());
         return category;
     }
 

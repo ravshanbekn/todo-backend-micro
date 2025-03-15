@@ -8,5 +8,4 @@ import lombok.Setter;
 public class PriorityFiltersDto {
 
     private String title;
-    private Long userId;
 }

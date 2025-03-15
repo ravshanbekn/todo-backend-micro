@@ -28,8 +28,9 @@ public class CategoryService {
     }
 
     @Transactional
-    public CategoryDto create(CategoryCreateRequestDto categoryCreateRequestDto) {
+    public CategoryDto create(Long userId, CategoryCreateRequestDto categoryCreateRequestDto) {
         Category category = categoryConverter.toEntity(categoryCreateRequestDto);
+        category.setUserId(userId); // todo: check if the user exists
         Category savedCategory = categoryRepository.save(category);
         return categoryConverter.toDto(savedCategory);
     }
@@ -55,8 +56,8 @@ public class CategoryService {
     }
 
     @Transactional(readOnly = true)
-    public List<CategoryDto> searchByFilter(CategoryFiltersDto categoryFilterDto) {
-        List<Category> categories = categoryRepository.findCategories(categoryFilterDto.getUserId(), categoryFilterDto.getTitle());
+    public List<CategoryDto> searchByFilter(Long userId, CategoryFiltersDto categoryFilterDto) {
+        List<Category> categories = categoryRepository.findCategories(userId, categoryFilterDto.getTitle());
         return categories.stream().map(categoryConverter::toDto).toList();
     }
 

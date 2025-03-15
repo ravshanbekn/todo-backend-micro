@@ -17,5 +17,4 @@ public class TaskCreateRequestDto {
     private Date date;
     private Long priorityId;
     private Long categoryId;
-    private Long userId;
 }

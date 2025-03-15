@@ -28,8 +28,9 @@ public class PriorityService {
     }
 
     @Transactional
-    public PriorityDto create(PriorityCreateRequestDto priorityCreateRequestDto) {
+    public PriorityDto create(Long userId, PriorityCreateRequestDto priorityCreateRequestDto) {
         Priority priority = priorityConverter.toEntity(priorityCreateRequestDto);
+        priority.setUserId(userId); // todo: check if the user exists
         Priority savedPriority = priorityRepository.save(priority);
         return priorityConverter.toDto(savedPriority);
     }
@@ -55,8 +56,8 @@ public class PriorityService {
     }
 
     @Transactional(readOnly = true)
-    public List<PriorityDto> searchByFilter(PriorityFiltersDto priorityFiltersDto) {
-        List<Priority> priorities = priorityRepository.findPriorities(priorityFiltersDto.getUserId(), priorityFiltersDto.getTitle());
+    public List<PriorityDto> searchByFilter(Long userId, PriorityFiltersDto priorityFiltersDto) {
+        List<Priority> priorities = priorityRepository.findPriorities(userId, priorityFiltersDto.getTitle());
         return priorities.stream().map(priorityConverter::toDto).toList();
     }
 
