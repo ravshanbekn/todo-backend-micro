@@ -9,6 +9,7 @@ import kz.ravshanbekn.todo.backend.micro.taskservice.model.dto.task.TaskUpdateRe
 import kz.ravshanbekn.todo.backend.micro.taskservice.model.entity.Task;
 import kz.ravshanbekn.todo.backend.micro.taskservice.repository.TaskRepository;
 import kz.ravshanbekn.todo.backend.micro.taskservice.util.DateUtil;
+import kz.ravshanbekn.todo.backend.micro.taskservice.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,6 +31,7 @@ public class TaskService {
     private final CategoryService categoryService;
     private final PriorityService priorityService;
     private final TaskRepository taskRepository;
+    private final UserValidator userValidator;
 
     @Transactional(readOnly = true)
     public List<TaskDto> findAllByUserId(Long userId) {
@@ -39,8 +41,9 @@ public class TaskService {
 
     @Transactional
     public TaskDto create(Long userId, TaskCreateRequestDto taskCreateRequestDto) {
+        userValidator.validateUserExistence(userId);
         Task task = taskConverter.toEntity(taskCreateRequestDto);
-        task.setUserId(userId); // todo: verify if the user exits
+        task.setUserId(userId);
         task.setCategory(Objects.nonNull(taskCreateRequestDto.getCategoryId()) ?
                 categoryService.getCategoryById(taskCreateRequestDto.getCategoryId()) : null);
         task.setPriority(Objects.nonNull(taskCreateRequestDto.getPriorityId()) ?

@@ -114,7 +114,7 @@ public class CategoryController {
             summary = "Search categories by filters",
             description = "Searches categories based on user ID and additional filter criteria.",
             parameters = {
-                    @Parameter(name = "userId", description = "User ID", required = true, example = "123")
+                    @Parameter(name = "userId", description = "User ID", required = true, example = "1")
             },
             responses = {
                     @ApiResponse(responseCode = "200", description = "Categories successfully retrieved"),

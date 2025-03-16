@@ -41,5 +41,9 @@ logging:
   pattern:
     console: "%C{1.} [%-5level] %d{yyyy-MM-dd HH:mm:ss} - %msg%n"
 
+api-gateway:
+  host: localhost
+  port: 8765
+
 server:
   port: 8090

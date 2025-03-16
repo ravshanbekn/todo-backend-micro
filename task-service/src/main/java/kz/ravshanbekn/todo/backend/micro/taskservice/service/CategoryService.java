@@ -1,13 +1,14 @@
 package kz.ravshanbekn.todo.backend.micro.taskservice.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import kz.ravshanbekn.todo.backend.micro.taskservice.converter.CategoryConverter;
+import kz.ravshanbekn.todo.backend.micro.taskservice.exception.EntityNotFoundException;
 import kz.ravshanbekn.todo.backend.micro.taskservice.model.dto.category.CategoryCreateRequestDto;
 import kz.ravshanbekn.todo.backend.micro.taskservice.model.dto.category.CategoryDto;
 import kz.ravshanbekn.todo.backend.micro.taskservice.model.dto.category.CategoryFiltersDto;
 import kz.ravshanbekn.todo.backend.micro.taskservice.model.dto.category.CategoryUpdateRequestDto;
 import kz.ravshanbekn.todo.backend.micro.taskservice.model.entity.Category;
 import kz.ravshanbekn.todo.backend.micro.taskservice.repository.CategoryRepository;
+import kz.ravshanbekn.todo.backend.micro.taskservice.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,7 @@ public class CategoryService {
 
     private final CategoryConverter categoryConverter;
     private final CategoryRepository categoryRepository;
+    private final UserValidator userValidator;
 
     @Transactional(readOnly = true)
     public List<CategoryDto> findAllByUserId(Long userId) {
@@ -29,8 +31,9 @@ public class CategoryService {
 
     @Transactional
     public CategoryDto create(Long userId, CategoryCreateRequestDto categoryCreateRequestDto) {
+        userValidator.validateUserExistence(userId);
         Category category = categoryConverter.toEntity(categoryCreateRequestDto);
-        category.setUserId(userId); // todo: check if the user exists
+        category.setUserId(userId);
         Category savedCategory = categoryRepository.save(category);
         return categoryConverter.toDto(savedCategory);
     }

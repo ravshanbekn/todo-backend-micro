@@ -8,6 +8,7 @@ import kz.ravshanbekn.todo.backend.micro.taskservice.model.dto.priority.Priority
 import kz.ravshanbekn.todo.backend.micro.taskservice.model.dto.priority.PriorityUpdateRequestDto;
 import kz.ravshanbekn.todo.backend.micro.taskservice.model.entity.Priority;
 import kz.ravshanbekn.todo.backend.micro.taskservice.repository.PriorityRepository;
+import kz.ravshanbekn.todo.backend.micro.taskservice.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,7 @@ public class PriorityService {
 
     private final PriorityConverter priorityConverter;
     private final PriorityRepository priorityRepository;
+    private final UserValidator userValidator;
 
     @Transactional(readOnly = true)
     public List<PriorityDto> findAll(Long userId) {
@@ -29,8 +31,9 @@ public class PriorityService {
 
     @Transactional
     public PriorityDto create(Long userId, PriorityCreateRequestDto priorityCreateRequestDto) {
+        userValidator.validateUserExistence(userId);
         Priority priority = priorityConverter.toEntity(priorityCreateRequestDto);
-        priority.setUserId(userId); // todo: check if the user exists
+        priority.setUserId(userId);
         Priority savedPriority = priorityRepository.save(priority);
         return priorityConverter.toDto(savedPriority);
     }
