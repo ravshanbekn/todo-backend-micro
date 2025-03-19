@@ -25,6 +25,7 @@ public class CategoryService {
 
     @Transactional(readOnly = true)
     public List<CategoryDto> findAllByUserId(Long userId) {
+        userValidator.validateUserExistence(userId);
         List<Category> allUserCategories = categoryRepository.findAllByUserIdOrderByTitleAsc(userId);
         return allUserCategories.stream().map(categoryConverter::toDto).toList();
     }
@@ -39,8 +40,8 @@ public class CategoryService {
     }
 
     @Transactional
-    public CategoryDto update(CategoryUpdateRequestDto categoryUpdateRequestDto) {
-        Category category = getCategoryById(categoryUpdateRequestDto.getId());
+    public CategoryDto update(Long categoryId, CategoryUpdateRequestDto categoryUpdateRequestDto) {
+        Category category = getCategoryById(categoryId);
         categoryConverter.updateCategory(categoryUpdateRequestDto, category);
         Category savedCategory = categoryRepository.save(category);
         return categoryConverter.toDto(savedCategory);

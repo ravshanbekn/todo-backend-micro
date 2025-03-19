@@ -56,10 +56,6 @@ public class TaskController {
             parameters = {
                     @Parameter(name = "userId", description = "User ID", required = true, example = "1")
             },
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "Task creation request",
-                    required = true
-            ),
             responses = {
                     @ApiResponse(responseCode = "201", description = "Task successfully created"),
                     @ApiResponse(responseCode = "400", description = "Invalid input data")
@@ -83,8 +79,9 @@ public class TaskController {
     )
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public TaskDto update(@RequestBody @Valid TaskUpdateRequestDto taskUpdateRequestDto) {
-        return taskService.update(taskUpdateRequestDto);
+    public TaskDto update(@RequestParam Long taskId,
+                          @RequestBody @Valid TaskUpdateRequestDto taskUpdateRequestDto) {
+        return taskService.update(taskId, taskUpdateRequestDto);
     }
 
     @Operation(

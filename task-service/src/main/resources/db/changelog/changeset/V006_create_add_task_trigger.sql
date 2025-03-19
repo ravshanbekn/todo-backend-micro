@@ -3,6 +3,10 @@ CREATE FUNCTION add_task_trigger_function()
 $$
 BEGIN
 
+    INSERT INTO stat_data (user_id, completed_total, uncompleted_total)
+    VALUES (NEW.user_id, 0, 0)
+    ON CONFLICT (user_id) DO NOTHING;
+
     IF (COALESCE(NEW.category_id, 0) > 0 AND
         NEW.completed = true)
     THEN

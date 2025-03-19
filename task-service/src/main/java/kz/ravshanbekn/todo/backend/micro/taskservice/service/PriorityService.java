@@ -39,8 +39,8 @@ public class PriorityService {
     }
 
     @Transactional
-    public PriorityDto update(PriorityUpdateRequestDto priorityUpdateRequestDto) {
-        Priority priority = getPriorityById(priorityUpdateRequestDto.getId());
+    public PriorityDto update(Long priorityId, PriorityUpdateRequestDto priorityUpdateRequestDto) {
+        Priority priority = getPriorityById(priorityId);
         priorityConverter.update(priorityUpdateRequestDto, priority);
         Priority updatedPriority = priorityRepository.save(priority);
         return priorityConverter.toDto(updatedPriority);

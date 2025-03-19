@@ -97,8 +97,9 @@ public class PriorityController {
     )
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public PriorityDto update(@RequestBody @Valid PriorityUpdateRequestDto priorityUpdateRequestDto) {
-        return priorityService.update(priorityUpdateRequestDto);
+    public PriorityDto update(@RequestParam Long priorityId,
+                              @RequestBody @Valid PriorityUpdateRequestDto priorityUpdateRequestDto) {
+        return priorityService.update(priorityId, priorityUpdateRequestDto);
     }
 
     @Operation(

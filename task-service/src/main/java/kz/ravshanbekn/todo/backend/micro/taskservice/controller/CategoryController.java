@@ -32,13 +32,13 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @Operation(
-            summary = "Retrieve all tasks by user ID",
-            description = "Returns a list of tasks that belong to the specified user.",
+            summary = "Retrieve all categories by user ID",
+            description = "Returns a list of categories that belong to the specified user.",
             parameters = {
                     @Parameter(name = "userId", description = "User ID", required = true, example = "1")
             },
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Tasks successfully retrieved"),
+                    @ApiResponse(responseCode = "200", description = "Categories successfully retrieved"),
                     @ApiResponse(responseCode = "400", description = "Invalid input data"),
                     @ApiResponse(responseCode = "404", description = "User not found")
             }
@@ -71,9 +71,6 @@ public class CategoryController {
     @Operation(
             summary = "Get category by ID",
             description = "Retrieves a category by its unique ID.",
-            parameters = {
-                    @Parameter(name = "categoryId", description = "Category ID", required = true, example = "10")
-            },
             responses = {
                     @ApiResponse(responseCode = "200", description = "Category successfully retrieved"),
                     @ApiResponse(responseCode = "400", description = "Invalid category ID"),
@@ -86,18 +83,28 @@ public class CategoryController {
         return categoryService.getById(categoryId);
     }
 
+    @Operation(
+            summary = "Update category",
+            description = "Update category.",
+            parameters = {
+                    @Parameter(name = "categoryId", description = "Category ID", required = true, example = "1")
+            },
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Category successfully created"),
+                    @ApiResponse(responseCode = "400", description = "Invalid input data"),
+                    @ApiResponse(responseCode = "404", description = "User not found")
+            }
+    )
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public CategoryDto update(@RequestBody @Valid CategoryUpdateRequestDto categoryUpdateRequestDto) {
-        return categoryService.update(categoryUpdateRequestDto);
+    public CategoryDto update(@RequestParam Long categoryId,
+                              @RequestBody @Valid CategoryUpdateRequestDto categoryUpdateRequestDto) {
+        return categoryService.update(categoryId, categoryUpdateRequestDto);
     }
 
     @Operation(
             summary = "Delete category by ID",
             description = "Deletes a category by its unique ID.",
-            parameters = {
-                    @Parameter(name = "categoryId", description = "Category ID to delete", required = true, example = "10")
-            },
             responses = {
                     @ApiResponse(responseCode = "200", description = "Category successfully deleted"),
                     @ApiResponse(responseCode = "400", description = "Invalid category ID"),

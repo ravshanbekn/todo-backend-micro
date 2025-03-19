@@ -1,40 +1,41 @@
 package kz.ravshanbekn.todo.backend.micro.taskservice.client;
 
-import kz.ravshanbekn.todo.backend.micro.taskservice.model.external.user.UserDto;
+import kz.ravshanbekn.todo.backend.micro.taskservice.model.dto.user.UserDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceClient {
 
-    @Value("${api-gateway.host}")
-    private String apiGateWayHost;
-    @Value("${api-gateway.port}")
-    private String apiGateWayPort;
+    private final WebClient apiGatewayWebClient;
 
-    private final RestTemplate restTemplate;
-
-    @Retryable(retryFor = RestClientException.class, backoff = @Backoff(delay = 5, multiplier = 2))
+    // todo: if it's out of attempts, throws exception, make Global exception handler for it
+    @Retryable(retryFor = WebClientResponseException.class, backoff = @Backoff(delay = 5, multiplier = 2))
     public Optional<UserDto> getUser(Long userId) {
-        String url = getBaseUrl() + "/users/" + userId;
-        ResponseEntity<UserDto> response = restTemplate.getForEntity(url, UserDto.class);
-        if (response.getStatusCode() == HttpStatus.OK) {
-            return Optional.ofNullable(response.getBody());
-        }
-        return Optional.empty();
-    }
-
-    private String getBaseUrl() {
-        return apiGateWayHost + ":" + apiGateWayPort;
+        String uri = "/user?userId=" + userId;
+        log.info("Calling user service: {}", uri);
+        UserDto userDto = apiGatewayWebClient.get()
+                .uri(uri)
+                .retrieve()
+                .onStatus(HttpStatusCode::is4xxClientError, response -> {
+                    throw new RuntimeException("Client error: " + response.statusCode());
+                })
+                .onStatus(HttpStatusCode::is5xxServerError, response -> {
+                    throw new RuntimeException("Server error: " + response.statusCode());
+                })
+                .bodyToMono(UserDto.class)
+                .block();
+        log.info("User service returned: {}", userDto);
+        return Optional.ofNullable(userDto);
     }
 }

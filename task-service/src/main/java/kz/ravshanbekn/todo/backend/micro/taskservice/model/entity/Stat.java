@@ -1,6 +1,5 @@
 package kz.ravshanbekn.todo.backend.micro.taskservice.model.entity;
 
-import jakarta.persistence.Cacheable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,11 +7,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 
 @Entity
@@ -21,8 +19,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @AllArgsConstructor
 @Setter
 @Getter
-@Cacheable
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Builder
 public class Stat {
 
     @Id

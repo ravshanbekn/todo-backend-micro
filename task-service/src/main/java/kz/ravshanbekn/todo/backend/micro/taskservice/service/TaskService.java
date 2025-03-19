@@ -53,8 +53,8 @@ public class TaskService {
     }
 
     @Transactional
-    public TaskDto update(TaskUpdateRequestDto taskUpdateRequestDto) {
-        Task task = getTaskById(taskUpdateRequestDto.getId());
+    public TaskDto update(Long taskId, TaskUpdateRequestDto taskUpdateRequestDto) {
+        Task task = getTaskById(taskId);
         task.setCategory(Objects.nonNull(taskUpdateRequestDto.getCategoryId()) ?
                 categoryService.getCategoryById(taskUpdateRequestDto.getCategoryId()) : null);
         task.setPriority(Objects.nonNull(taskUpdateRequestDto.getPriorityId()) ?

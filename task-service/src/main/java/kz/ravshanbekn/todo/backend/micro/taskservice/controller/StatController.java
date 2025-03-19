@@ -33,7 +33,7 @@ public class StatController {
     )
     @PostMapping("/stat")
     @ResponseStatus(HttpStatus.OK)
-    public StatDto findByEmail(@RequestParam Long userId) {
+    public StatDto findByUserID(@RequestParam Long userId) {
         return statService.findByUserId(userId);
     }
 }
