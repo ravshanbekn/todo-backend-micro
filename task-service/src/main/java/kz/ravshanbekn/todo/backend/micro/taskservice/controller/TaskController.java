@@ -33,6 +33,12 @@ public class TaskController {
 
     private final TaskService taskService;
 
+    @PostMapping("/init")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void initTasks(@RequestParam Long userId) {
+        taskService.createInitTasks(userId);
+    }
+
     @Operation(
             summary = "Retrieve all tasks for a user",
             description = "Returns a list of all tasks associated with the given user ID.",

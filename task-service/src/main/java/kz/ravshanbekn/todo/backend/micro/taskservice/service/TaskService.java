@@ -2,6 +2,10 @@ package kz.ravshanbekn.todo.backend.micro.taskservice.service;
 
 import kz.ravshanbekn.todo.backend.micro.taskservice.converter.TaskConverter;
 import kz.ravshanbekn.todo.backend.micro.taskservice.exception.EntityNotFoundException;
+import kz.ravshanbekn.todo.backend.micro.taskservice.model.dto.category.CategoryCreateRequestDto;
+import kz.ravshanbekn.todo.backend.micro.taskservice.model.dto.category.CategoryDto;
+import kz.ravshanbekn.todo.backend.micro.taskservice.model.dto.priority.PriorityCreateRequestDto;
+import kz.ravshanbekn.todo.backend.micro.taskservice.model.dto.priority.PriorityDto;
 import kz.ravshanbekn.todo.backend.micro.taskservice.model.dto.task.TaskCreateRequestDto;
 import kz.ravshanbekn.todo.backend.micro.taskservice.model.dto.task.TaskDto;
 import kz.ravshanbekn.todo.backend.micro.taskservice.model.dto.task.TaskFiltersDto;
@@ -17,7 +21,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -41,7 +45,7 @@ public class TaskService {
 
     @Transactional
     public TaskDto create(Long userId, TaskCreateRequestDto taskCreateRequestDto) {
-        userValidator.validateUserExistence(userId);
+//        userValidator.validateUserExistence(userId); // todo: change to jwt
         Task task = taskConverter.toEntity(taskCreateRequestDto);
         task.setUserId(userId);
         task.setCategory(Objects.nonNull(taskCreateRequestDto.getCategoryId()) ?
@@ -81,13 +85,13 @@ public class TaskService {
     public Page<TaskDto> findTasksByFilters(Long userId, TaskFiltersDto taskFiltersDto) {
         // todo: check if the user exists
 
-        Date dateFrom = null;
-        Date dateTo = null;
+        LocalDateTime dateFrom = null;
+        LocalDateTime dateTo = null;
         if (Objects.nonNull(taskFiltersDto.getDateFrom())) {
-            dateFrom = DateUtil.getDateBeginning(taskFiltersDto.getDateFrom());
+            dateFrom = DateUtil.getStartOfDay(taskFiltersDto.getDateFrom());
         }
         if (Objects.nonNull(taskFiltersDto.getDateTo())) {
-            dateTo = DateUtil.getDateEnding(taskFiltersDto.getDateTo());
+            dateTo = DateUtil.getEndOfDay(taskFiltersDto.getDateTo());
         }
 
         Sort.Direction direction = taskFiltersDto.getSortDirection().trim().equalsIgnoreCase("ASC") ? Sort.Direction.ASC : Sort.Direction.DESC;
@@ -103,5 +107,41 @@ public class TaskService {
     public Task getTaskById(Long taskId) {
         return taskRepository.findById(taskId)
                 .orElseThrow(() -> new EntityNotFoundException("Task not found by ID: " + taskId));
+    }
+
+    @Transactional
+    public void createInitTasks(Long userId) {
+        PriorityCreateRequestDto highPriority = new PriorityCreateRequestDto("High", "#FF5768");
+        PriorityCreateRequestDto mediumPriority = new PriorityCreateRequestDto("Medium", "#FFD872");
+        PriorityCreateRequestDto lowPriority = new PriorityCreateRequestDto("Low", "#FFD872");
+
+        CategoryCreateRequestDto workCategory = new CategoryCreateRequestDto("Work");
+        CategoryCreateRequestDto familyCategory = new CategoryCreateRequestDto("Family");
+
+        PriorityDto createdHighPriority = priorityService.create(userId, highPriority);
+        PriorityDto createdMediumPriority = priorityService.create(userId, mediumPriority);
+        priorityService.create(userId, lowPriority);
+
+        CategoryDto createdWorkCategory = categoryService.create(userId, workCategory);
+        CategoryDto createdFamilyCategory = categoryService.create(userId, familyCategory);
+
+        TaskCreateRequestDto callFamilyTask = TaskCreateRequestDto.builder()
+                .date(LocalDateTime.now().plusDays(1))
+                .title("Call Family")
+                .completed(false)
+                .categoryId(createdFamilyCategory.getId())
+                .priorityId(createdHighPriority.getId())
+                .build();
+
+        TaskCreateRequestDto accomplishWorkTask = TaskCreateRequestDto.builder()
+                .date(LocalDateTime.now().plusDays(2))
+                .title("Accomplish Work")
+                .completed(false)
+                .categoryId(createdWorkCategory.getId())
+                .priorityId(createdMediumPriority.getId())
+                .build();
+
+        create(userId, callFamilyTask);
+        create(userId, accomplishWorkTask);
     }
 }

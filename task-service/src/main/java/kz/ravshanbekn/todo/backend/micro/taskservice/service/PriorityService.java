@@ -31,7 +31,7 @@ public class PriorityService {
 
     @Transactional
     public PriorityDto create(Long userId, PriorityCreateRequestDto priorityCreateRequestDto) {
-        userValidator.validateUserExistence(userId);
+//        userValidator.validateUserExistence(userId); // todo: change to jwt
         Priority priority = priorityConverter.toEntity(priorityCreateRequestDto);
         priority.setUserId(userId);
         Priority savedPriority = priorityRepository.save(priority);

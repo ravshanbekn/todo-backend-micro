@@ -25,14 +25,14 @@ public class CategoryService {
 
     @Transactional(readOnly = true)
     public List<CategoryDto> findAllByUserId(Long userId) {
-        userValidator.validateUserExistence(userId);
+//        userValidator.validateUserExistence(userId); todo: change to jwt
         List<Category> allUserCategories = categoryRepository.findAllByUserIdOrderByTitleAsc(userId);
         return allUserCategories.stream().map(categoryConverter::toDto).toList();
     }
 
     @Transactional
     public CategoryDto create(Long userId, CategoryCreateRequestDto categoryCreateRequestDto) {
-        userValidator.validateUserExistence(userId);
+//        userValidator.validateUserExistence(userId); todo: change to jwt
         Category category = categoryConverter.toEntity(categoryCreateRequestDto);
         category.setUserId(userId);
         Category savedCategory = categoryRepository.save(category);

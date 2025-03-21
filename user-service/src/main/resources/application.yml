@@ -41,5 +41,9 @@ eureka:
   instance:
     instance-id: ${spring.application.name}:${server.port}
 
+api-gateway:
+  host: localhost
+  port: 8765
+
 server:
   port: 8080

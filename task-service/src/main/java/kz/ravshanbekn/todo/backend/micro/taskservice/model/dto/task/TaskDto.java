@@ -5,7 +5,7 @@ import kz.ravshanbekn.todo.backend.micro.taskservice.model.dto.priority.Priority
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 
 @Getter
@@ -15,7 +15,7 @@ public class TaskDto {
     private Long id;
     private String title;
     private Boolean completed;
-    private Date date;
+    private LocalDateTime date;
     private PriorityDto priority;
     private CategoryDto category;
     private Long userId;

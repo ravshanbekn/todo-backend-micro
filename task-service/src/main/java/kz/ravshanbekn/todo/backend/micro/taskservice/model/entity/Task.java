@@ -16,7 +16,7 @@ import lombok.Setter;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 
 @Entity
@@ -40,7 +40,7 @@ public class Task {
     private Boolean completed;
 
     @Column(name = "date")
-    private Date date;
+    private LocalDateTime date;
 
     @ManyToOne
     @JoinColumn(name = "priority_id", referencedColumnName = "id")
