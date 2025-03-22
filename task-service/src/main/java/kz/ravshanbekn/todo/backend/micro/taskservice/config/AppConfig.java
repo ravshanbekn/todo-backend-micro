@@ -1,5 +1,6 @@
 package kz.ravshanbekn.todo.backend.micro.taskservice.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.ws.rs.core.HttpHeaders;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

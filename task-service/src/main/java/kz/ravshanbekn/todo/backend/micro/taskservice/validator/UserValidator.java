@@ -14,7 +14,7 @@ public class UserValidator {
     private final UserServiceClient userServiceClient;
 
     public void validateUserExistence(Long userId) {
-        log.debug("Validating user existence with id {}", userId);
+        log.info("Validating user existence with id {}", userId);
         userServiceClient.getUser(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User with id " + userId + " does not exist"));
     }

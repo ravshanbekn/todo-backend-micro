@@ -45,7 +45,7 @@ public class TaskService {
 
     @Transactional
     public TaskDto create(Long userId, TaskCreateRequestDto taskCreateRequestDto) {
-//        userValidator.validateUserExistence(userId); // todo: change to jwt
+        userValidator.validateUserExistence(userId); // todo: change to jwt
         Task task = taskConverter.toEntity(taskCreateRequestDto);
         task.setUserId(userId);
         task.setCategory(Objects.nonNull(taskCreateRequestDto.getCategoryId()) ?
