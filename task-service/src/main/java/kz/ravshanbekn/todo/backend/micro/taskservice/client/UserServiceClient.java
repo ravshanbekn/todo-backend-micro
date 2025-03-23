@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
 
-@FeignClient(name = "user-service")
+@FeignClient(name = "user-service", fallback = UserServiceClientFallback.class)
 public interface UserServiceClient {
 
     @GetMapping("/user")

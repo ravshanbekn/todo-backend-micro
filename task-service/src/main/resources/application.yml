@@ -16,6 +16,10 @@ spring:
     url: jdbc:postgresql://localhost:5433/todo_task_db
     username: postgres
     password: postgres
+  cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true
 
 eureka:
   client:
@@ -40,8 +44,6 @@ management:
 logging:
   pattern:
     console: "%C{1.} [%-5level] %d{yyyy-MM-dd HH:mm:ss} - %msg%n"
-
-
 
 api-gateway:
   host: localhost
