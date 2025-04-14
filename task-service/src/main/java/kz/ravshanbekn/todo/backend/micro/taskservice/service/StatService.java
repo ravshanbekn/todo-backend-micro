@@ -29,7 +29,4 @@ public class StatService {
                 });
         return statConverter.toDto(stat);
     }
-
-    private void createStat(Long userId) {
-    }
 }

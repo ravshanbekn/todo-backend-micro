@@ -17,6 +17,22 @@ spring:
     username: postgres
     password: postgres
 
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: rmuser
+    password: rmpassword
+
+  cloud:
+    function:
+      definition: userCreatedEventSupplier
+    stream:
+      bindings:
+        userCreatedEventSupplier-out-0:
+          destination: user-created-topic
+          content-type: application/json
+      default-binder: rabbit
+
 management:
   endpoint:
     gateway:

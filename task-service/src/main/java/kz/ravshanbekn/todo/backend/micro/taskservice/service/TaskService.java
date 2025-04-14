@@ -11,10 +11,12 @@ import kz.ravshanbekn.todo.backend.micro.taskservice.model.dto.task.TaskDto;
 import kz.ravshanbekn.todo.backend.micro.taskservice.model.dto.task.TaskFiltersDto;
 import kz.ravshanbekn.todo.backend.micro.taskservice.model.dto.task.TaskUpdateRequestDto;
 import kz.ravshanbekn.todo.backend.micro.taskservice.model.entity.Task;
+import kz.ravshanbekn.todo.backend.micro.taskservice.model.enums.Verify;
 import kz.ravshanbekn.todo.backend.micro.taskservice.repository.TaskRepository;
 import kz.ravshanbekn.todo.backend.micro.taskservice.util.DateUtil;
 import kz.ravshanbekn.todo.backend.micro.taskservice.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -26,6 +28,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class TaskService {
 
@@ -44,8 +47,10 @@ public class TaskService {
     }
 
     @Transactional
-    public TaskDto create(Long userId, TaskCreateRequestDto taskCreateRequestDto) {
-        userValidator.validateUserExistence(userId); // todo: change to jwt
+    public TaskDto create(Long userId, TaskCreateRequestDto taskCreateRequestDto, Verify verify) {
+        if (verify.equals(Verify.ENABLED)) {
+            userValidator.validateUserExistence(userId); // todo: change to jwt
+        }
         Task task = taskConverter.toEntity(taskCreateRequestDto);
         task.setUserId(userId);
         task.setCategory(Objects.nonNull(taskCreateRequestDto.getCategoryId()) ?
@@ -141,7 +146,9 @@ public class TaskService {
                 .priorityId(createdMediumPriority.getId())
                 .build();
 
-        create(userId, callFamilyTask);
-        create(userId, accomplishWorkTask);
+        create(userId, callFamilyTask, Verify.DISABLED);
+        create(userId, accomplishWorkTask, Verify.DISABLED);
+
+        log.info("User init tasks were created");
     }
 }

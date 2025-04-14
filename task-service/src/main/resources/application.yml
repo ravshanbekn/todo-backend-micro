@@ -16,10 +16,24 @@ spring:
     url: jdbc:postgresql://localhost:5433/todo_task_db
     username: postgres
     password: postgres
+
   cloud:
+    function:
+      definition: userCreatedEventConsumer
+    stream:
+      bindings:
+        userCreatedEventConsumer-in-0:
+          destination: user-created-topic
+          content-type: application/json
     openfeign:
       circuitbreaker:
         enabled: true
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: rmuser
+    password: rmpassword
 
 eureka:
   client:

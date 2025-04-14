@@ -8,6 +8,7 @@ import kz.ravshanbekn.todo.backend.micro.taskservice.model.dto.task.TaskCreateRe
 import kz.ravshanbekn.todo.backend.micro.taskservice.model.dto.task.TaskDto;
 import kz.ravshanbekn.todo.backend.micro.taskservice.model.dto.task.TaskFiltersDto;
 import kz.ravshanbekn.todo.backend.micro.taskservice.model.dto.task.TaskUpdateRequestDto;
+import kz.ravshanbekn.todo.backend.micro.taskservice.model.enums.Verify;
 import kz.ravshanbekn.todo.backend.micro.taskservice.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -71,7 +72,7 @@ public class TaskController {
     @ResponseStatus(HttpStatus.CREATED)
     public TaskDto create(@RequestParam Long userId,
                           @RequestBody @Valid TaskCreateRequestDto taskCreateRequestDto) {
-        return taskService.create(userId, taskCreateRequestDto);
+        return taskService.create(userId, taskCreateRequestDto, Verify.ENABLED);
     }
 
     @Operation(
