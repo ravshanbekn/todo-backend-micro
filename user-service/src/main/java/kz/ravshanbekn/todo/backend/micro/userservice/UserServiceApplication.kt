@@ -1,15 +1,13 @@
-package kz.ravshanbekn.todo.backend.micro.userservice;
+package kz.ravshanbekn.todo.backend.micro.userservice
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.runApplication
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient
 
 @SpringBootApplication
 @EnableDiscoveryClient
-public class UserServiceApplication {
+open class UserServiceApplication
 
-    public static void main(String[] args) {
-        SpringApplication.run(UserServiceApplication.class, args);
-    }
-
+fun main(args: Array<String>) {
+    runApplication<UserServiceApplication>(*args)
 }
